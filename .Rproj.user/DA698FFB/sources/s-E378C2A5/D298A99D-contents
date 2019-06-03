@@ -1,0 +1,11 @@
+---
+title: "Classe 0 - Introducció"
+author: "Eudald Correig"
+date: "3/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
