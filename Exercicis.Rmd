@@ -1,0 +1,37 @@
+---
+title: "Exercicis"
+author: "Aquí hi podeu posar el vostre nom"
+date: "Juny 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)
+```
+
+# Exercici 1: manipulació i anàlisi exploratori
+
+0. Assegura't que estàs al directori de treball que toca.
+1. Importa el fitxer prostate.xls a la carpeta input. *Alerta:* està en format "xls", que és l'excel antic, segurament hagis de buscar al google com s'importen.
+Podeu trobar info sobre aquest dataset aquí:
+
+> http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/Cprostate.html
+
+2. Explora'l amb les eines de la classe 2 (str, View, pairs, etc).
+3. Formategeu correctament les variables que interessin i traieu les que no.
+Entre altres coses, veureu que hi ha alguns missings; els podeu imputar fent (això ho veurem en la propera classe):
+
+```{r}
+require(mice)
+temp = mice(df) # on df és el nom del dataframe
+dfi = complete(temp)
+```
+
+3. Ara fixeu-vos que tenim la variable status amb 1 nivell de viu, 5 nivells de mort i un nivell d'altres. A nosaltres en aquest moment només ens interessa viu o mort, per tant creeu una nova variable que sigui viu o mort. Podeu fer un loop o utilitzar la funció ifelse (que hem vist a la classe 3).
+
+4. Busqueu associacions entre les diferents variables i l'status. Tingueu en compte que algunes són contínues (on podem fer t-test o Mann U test) i d'altres són categòriques (i podem fer chi-quadrat, per exemple).
+
+5. Feu gràfics simples d'aquestes associacions.
+
+

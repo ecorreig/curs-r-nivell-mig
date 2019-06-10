@@ -1,0 +1,386 @@
+---
+title: "2 - Importació i Manipulació bàsica"
+author: "Eudald Correig"
+date: "10/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Importar bases de dades
+
+- R sap llegir dades de gairebé qualsevol format.
+- El sistema és habitualment senzill i només cal tenir en compte quina llibreria cal en cada cas.
+- En general, l'objecte generat és un dataframe
+
+Resum de comandes per als formats més utilitzats:
+
+```{r,echo=FALSE, results='hide'}
+set.seed(1)
+
+library(knitr)
+tab<-rbind(cbind("Text (.csv)"
+, "Base/Readr", 
+"read.csv(ruta, header=TRUE, row.names='id')"),
+
+cbind("Text (.txt/ .csv)"
+, "Base/Readr/data.table", 
+"read.table(ruta, header=TRUE, sep=',', row.names='id')"),
+
+cbind("MSExcel (.xls / .xlsx)"
+, "xlsx", 
+"read.xlsx( ruta, sheetName = 'Fulla1')"),
+
+
+cbind("SPSS (.sav)"
+, "foreign", 
+"read.spss(ruta)"),
+
+
+cbind("Stata (.dta)"
+, "foreign", 
+"read.dta( ruta)"),
+
+
+
+cbind("SAS (.xpt)"
+, "foreign", 
+"Read.xport(ruta)"))
+
+colnames(tab)<-c("Format", "Llibreria","Sintaxis")
+```
+
+\tiny
+```{r,echo=FALSE}
+kable(tab, row.names=FALSE)
+```
+
+## Importar fitxers de text (.txt, .csv)
+
+```{r, eval=FALSE}
+df = read.table("ruta",
+                header=TRUE,   #primera línia noms variables
+                sep="," ,  #separador entre variables  
+                stringsAsFactors = FALSE,   #no factors per defecte
+                na.strings=c("NA","**"), #codis per a missings
+                dec="." #simbol decimal
+)
+
+```
+
+## Importar fitxers MS Excel 
+
+```{r, eval=FALSE}
+library(openxlsx)
+
+df = read.xlsx("ruta",
+               sheetIndex,  #nº de fulla (evitar posar el nom)
+               sheetName="Full1", #nom de la fulla
+               as.data.frame=TRUE, #com un data frame
+               header=TRUE,  #noms variables
+               rowIndex=20, #número de files per llegir
+)
+
+``` 
+
+## Importar fitxers SPSS 
+
+
+```{r, eval=FALSE}
+library(foreign)
+
+df = read.spss("ruta",
+               use.value.labels=TRUE,  # factors
+               to.data.frame=TRUE, #data frame
+)
+
+```
+
+##  Exemple
+
+```{r}
+dades = read.csv("input/dades.csv", row.names="id")
+```
+
+
+
+# Exploració de les dades
+
+## Estructura
+
+Fem una ullada a les dades
+
+```{r, eval=T}
+str(dades) #mostra estructura d'un objecte
+```
+
+
+
+## Primeres files
+
+```{r, eval=T}
+head(dades) #mostra les primeres files
+```
+
+
+## Altres funcions
+
+```{r, eval=FALSE}
+tail(dades) #mostra les darreres files
+```
+
+```{r, eval=FALSE}
+View(dades) # mostra tot el conjunt de dades
+```
+
+**Nota**: aquesta última comanda, com ja hem vist, no és recomanable que la posem en un markdown, simplement l'escrivim a la consola, ja que si no pot provocar problemes a l'hora de fer "Knit".
+
+Fem un resum de totes les variables amb:
+
+```{r}
+summary(dades)
+```
+
+Visualització ràpida
+
+```{r}
+pairs(dades)
+```
+
+# Manipulació de variables
+
+##  Creació noves variables
+
+Entrem les alçades i els pesos:
+
+```{r}
+dades$alcada = rnorm(nrow(dades), mean = 170, sd = 10)
+dades$pes = rnorm(nrow(dades), mean = 75, sd = 10)
+```
+
+Índex de massa corporal $imc= \frac{pes}{alçada^{2}}$
+
+```{r, eval=T}
+alcada.m<-dades$alcada/100
+dades$imc<-dades$pes/ alcada.m^2
+```
+
+## Visualitzem
+
+```{r}
+head(dades)
+```
+
+O bé sempre podem mirar la pestanya de visualització, que estarà actualitzada.
+
+## Recodificació de variables
+
+re-codificar imc: <18;18-<25;25-<30;>30
+```{r, eval=T}
+dades$imccat[dades$imc<18]<-0
+dades$imccat[dades$imc>=18 & dades$imc<25]<-1
+dades$imccat[dades$imc>=25 & dades$imc<30]<-2
+dades$imccat[dades$imc>=30]<-3
+
+dades$imccat<-factor(dades$imccat,levels=c(0,1,2,3),
+                     labels=c("baix pes","normal",
+                              "sobrepes","obesitat"))
+
+# Alternativa
+dades$imccat <- cut(dades$imc, breaks=c(-Inf,18,25,30,Inf), 
+                    labels = c("baix pes","normal",
+                               "sobrepes","obesitat"))
+```
+
+
+## Modificació de nivells d'un factor
+
+Una possible manera de fer-ho:
+
+```{r, eval=T}
+library(plyr) #llibreria tractament de dades
+
+dades$imccat <-revalue(dades$imccat, c("normal"="estàndar"))
+
+``` 
+
+
+## Funcions de transformació de variables
+
+- as.numeric()
+
+- as.character()
+
+- as.factor()
+
+
+
+## Transformació de variables:exemples
+
+- as.numeric
+
+```{r, eval=T}
+a<-c("1", "3", "5")
+as.numeric(a)
+
+```
+
+Quan passem de caràcter a numèric ens podem trobar amb missings:
+
+```{r, eval=T}
+b<-c("1", "est", "5")
+as.numeric(b)
+```
+
+
+## Transformació de variables:exemples
+
+**Compte quan passem de factor a numèric!!!**
+
+```{r, eval=T}
+b<-factor(c("1", "10", "5"))
+as.numeric(b)
+```
+
+Passem sempre per as.character:
+```{r}
+as.numeric(as.character(b))
+```
+
+## Recodificació de nivells
+
+Si tenim alguna variable categòrica codificada en la nostra base de dades amb un caràcter (p.ex. "malalt", "control"), l'R la codificarà correctament com a categòrica, però si en canvi la tenim com a 0 i 1, l'R es pensarà que és una variable numèrica. Això ho canviem de la següent manera:
+
+```{r}
+# Creem una variable de 0 i 1:
+dades$malaltia = rbinom(10, 1, .5)
+str(dades)
+```
+
+```{r}
+dades$malaltia = factor(dades$malaltia, levels = c(0, 1), labels = c("Control", "Malalt"))
+# Alerta de només fer això una vegada!!!
+```
+
+
+
+# Dataframes
+
+- És una col·lecció ordenada d'elements de **qualsevol tipus** de dues dimensions.
+
+```{r}
+str(dades) #Mostrar primeres files/registres
+
+```
+
+```{r}
+summary(dades)
+```
+
+## Subseleccions en dataframes
+
+- Els claudàtors "[ , ]" indiquen subselecció.
+- La primera posició pertany a les files, la segona a les columnes.
+- Poso un número o un vector dins de cada posició per indicar quines files o columnes vull.
+- Si no poso res en una de les posicions estic indicant totes les files/columnes
+- Si poso un número negatiu o un vector precedit d'un símbol "-" estic indicant totes les files/columnes menys aquella o aquelles.
+- Atenció que els vectors s'han de fer o bé en format a:b o bé amb la funció c().
+
+Seleccionem una cel·la en concret, p. e., fila 2 columna 1:
+
+```{r}
+dades.new[2, 1]
+```
+
+Seleccionem una fila, per exemple la tercera:
+
+```{r}
+dades.new[3, ] # Noteu la coma i l'espai buit!
+```
+
+Seleccionem una columna, per exemple la cinquena:
+
+```{r}
+dades.new[,5]
+```
+
+També ho podem fer amb el nom fent servir el símbol del dòlar "$"
+
+```{r}
+dades.new$edat
+```
+
+- Podem seleccionar més d'una fila o columna
+- El resultat és una altra dataframe
+
+Per exemple, seleccionem les tres primeres files i totes les columnes:
+```{r}
+dades.new[1:3,]
+```
+
+Seleccionem les tres últimes columnes i totes les files:
+
+```{r}
+dades.new[,3:5] 
+```
+
+Seleccionem totes les files menys la 4 i totes les columnes menys la primera:
+
+
+```{r}
+dades.new[-4,-1]
+```
+
+Podem crear una nova dataframe amb la subselecció:
+
+```{r}
+dades.sub = dades.new[c(4,5,7:9),-c(1,3)]
+dades.sub
+```
+
+Podem posar una condició dins de la subselecció
+
+```{r}
+dones = dades.new[dades.new$sexe == "D",]
+dones
+```
+
+Un altre exemple:
+
+```{r}
+grans = dades.new[dades.new$edat > 85,]
+grans
+```
+
+D'una manera equivalent:
+
+- Triem les variables que volem
+```{r, eval=FALSE}
+variables<-c("id","sexe","imc")
+dades<-dades[variables]
+```
+
+- Descartem variables (símbol d'exclamació "!" equival a "NO")
+
+```{r, eval=FALSE}
+dades<-dades[!variables]
+```
+
+## Ordenar dataframes
+
+- Ordenar per una variable
+```{r, eval=FALSE}
+dades<-dades[order(dades$imc),]
+```
+
+- Ordenar per més d'una variable
+```{r, eval=FALSE}
+dades<-dades[order(dades$sexe,dades$imc),]
+```
+
+- Ordre descendent
+```{r, eval=FALSE}
+dades<-dades[order(dades$sexe,-dades$imc),]
+```

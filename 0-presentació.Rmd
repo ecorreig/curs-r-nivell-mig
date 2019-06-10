@@ -1,7 +1,7 @@
 ---
 title: "Classe 0 - Introducció"
 author: "Eudald Correig"
-date: "3/6/2019"
+date: "Juny 2019"
 output: ioslides_presentation
 ---
 
@@ -48,4 +48,34 @@ Recomanacions:
 
 ## Recursos
 
-Podeu trobar aquest curs a 
+Podeu trobar aquest curs a: 
+
+https://github.com/ecorreig/curs-r-nivell-mig
+
+Altres fonts d'informació:
+
+https://itsalocke.com/files/DataManipulationinR.pdf
+
+https://data-flair.training/blogs/data-manipulation-in-r/
+
+Avançat:
+
+https://www.datacamp.com/courses/dplyr-data-manipulation-r-tutorial
+
+https://www.datasciencecentral.com/profiles/blogs/exclusive-tutorial-on-data-manipulation-with-r-50-examples
+
+## Obtenir informació i ajuda
+
+Llocs on treure informació sobre llibreries, tutorials o demanar ajuda:
+
+**Tutorials**: https://www.statmethods.net/index.html, https://www.r-bloggers.com
+
+**Documentació**: https://cran.r-project.org/manuals.html
+
+**LLibreries** (exemple): https://cran.r-project.org/web/packages/lme4/lme4.pdf
+
+**Demanar ajuda**: https://stackoverflow.com (prgramar)
+
+**Demanar ajuda**: https://stats.stackexchange.com/ (estadística)
+
+Per qualsevol altra cosa, google.

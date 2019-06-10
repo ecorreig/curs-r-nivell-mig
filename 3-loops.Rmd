@@ -1,0 +1,293 @@
+---
+title: "3 - Loops i condicionals"
+author: "Eudald Correig"
+date: "Juny 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(knitr)
+require(ggplot2)
+```
+
+En aquest document aprendrem a treballar amb loops i condicionals. No és absolutament necessari per fer estadística en R però ens pot ajudar en alguns casos.
+
+## Què és un "loop"
+
+Un loop és una operació en la qual el programa (en aquest cas, R) duu a terme una operació sobre **més d'un objecte** i/o de forma iterativa.
+
+Veiem un exemple:
+
+```{r}
+for (i in 1:10){
+  print(i)
+}
+```
+
+En R els loops es fan amb l'operació "for". L'operació té dues parts:
+1. La *seqüència* (el que trobem entre parèntesis), on anomenem la variable muda (la i) i en predefinim els valors. El "for" iterarà sobre aquests valors. 
+
+1. El *cos* de la funció, és a dir, l'operació que volem fer, i que trobem dins dels claudàtors. En aquest cas el cos és trivial, ja que simplement imprimim en pantalla el valor de la variable muda. 
+
+Un altre exemple: 
+
+```{r}
+suma = 0
+for (i in 1:100){
+  suma = suma + i
+}
+suma
+```
+
+Aquí estem actualitzant el valor de la variable suma cada vegada.
+
+Inspeccionem què fa:
+
+```{r}
+suma = 0
+for (i in 1:100){
+  suma = suma + i
+  print(paste0("i = ", i))
+  print(paste0("suma = ", suma))
+}
+```
+
+Els valors que pren la variable muda no han de ser consecutius:
+
+```{r}
+primers = c(2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97)
+
+suma_primers = 0
+for (i in primers){
+  suma_primers = suma_primers + i
+}
+suma_primers
+```
+
+Exemple pràctic:
+
+```{r}
+df = read.csv('input/Heart.csv')
+df$X=NULL # traiem la primera, que no té cap sentit
+str(df) # Mirem l'estructura de les variables
+```
+
+Veiem que les variables Sex, Fbs, RestECG, ExAng, Slope, Ca són categòriques però estan codificades com a coníntues; les podem codificar correctament una a una o totes a la vegada; això ho farem amb un loop:
+
+
+```{r}
+cat = c(2, 6, 7, 9, 11, 12)
+for (i in cat){
+  df[, i] = as.factor(df[, i])
+}
+str(df)
+```
+
+Amb els noms de les columnes:
+
+```{r}
+df = read.csv('input/Heart.csv')
+df$X=NULL # traiem la primera, que no té cap sentit
+str(df) # Mirem l'estructura de les variables
+```
+
+```{r}
+cat = c("Sex", "Fbs", "RestECG", "ExAng", "Slope", "Ca")
+for (nom in cat){
+  df[, nom] = as.factor(df[, nom])
+}
+str(df)
+```
+
+# Condicions en R
+
+## Símbols de comparació
+
+Els possibles símbols de comparació són: 
+
+```{r}
+Símbol = c("<", "<=", ">", ">=", "==", "!=", "!x", "x | y", "x & y", "%in%")
+Explicació = c("Més petit", "Més petit o igual", "Més gran", "Més gran o iqual", "Exactament igual", 
+                 "Diferent", "No és x", "o x o y", "x i y", "dins de")
+kable(cbind(Símbol, Explicació))
+```
+
+Exemples:
+
+```{r}
+a = 2
+b = 3
+d = c(2, 4)
+
+a == b
+a != b
+a < b
+a %in% d
+b %in% d
+```
+
+Agrupats:
+
+```{r}
+(a == b | a %in% d)
+(a == b & a %in% d)
+```
+
+Negacions:
+
+```{r}
+!TRUE
+
+# per exemple, tots els que no estiguin a una llista:
+!b %in% d
+```
+
+Els condicionals evaluen una condició i actuen en cas que aquesta es compleixi.
+
+Per exemple:
+
+```{r}
+a = 10
+
+if (a > 5){
+  print(a)
+}
+```
+
+Els condicionals amb R (i en la majoria de llenguatges) es fan amb "if", i l'estructura és semblant a la dels loops. En aquest as, el que hi ha dins del parèntesis és una condició i, entre els claudàtors, l'acció.
+
+Podem fer condicionals amb més d'una condició:
+
+```{r}
+a = -1
+if (a > 5 | a < 0){
+  print(a)
+}
+```
+
+Podem evaluar diferents condicions amb l'expressió "else if" i "else":
+
+```{r}
+if (a > 0){
+  
+  print("La a és positiva.")
+  
+} else if (a < 0){
+  
+  print("La a és negativa.")
+  
+} else if (a == 0){
+  
+  print("La a és 0.")
+  
+} else{
+  
+  print("La a no és un número.")
+  
+}
+```
+
+## Funció which
+
+Per saber quins compleixen una condició:
+
+```{r}
+a = round(rnorm(100, 50, 10))
+
+which(a > 65)
+```
+
+
+# Loops amb condicionals
+
+Podem ajuntar les dues operacions de la següent manera:
+
+```{r}
+suma_parells = 0
+suma_senars = 0
+for (i in 1:100){
+  if (i %% 2 == 0){
+    suma_parells = suma_parells + i
+  }
+  else {
+    suma_senars = suma_senars + i
+  }
+}
+suma_parells
+suma_senars
+```
+
+
+## ifelse
+
+R té una funció molt útil que ens permet fer aquest tipus d'operacions de forma més simple i ràpida (ja que és una operació vectoritzada) amb la funció ifelse:
+
+```{r}
+dades$persona_gran = ifelse(dades$edat>75, "sí", "no")
+```
+
+
+Exemple pràctic:
+
+Importem una base de dades amb moltes comparacions múltiples:
+
+```{r}
+df = read.csv('input/dades_mult.csv')
+```
+
+```{r}
+nivell_sig = 0.01
+for (i in 2:ncol(df)){
+  wt = wilcox.test(df[,i]~df$Grup)
+  p_val = wt$p.value
+  
+  if (p_val < nivell_sig){
+    print(paste0("La variable ", names(df)[i], " és significativa amb p-valor ", p_val, "."))
+  }
+}
+```
+
+Podem fer coses més complicades:
+
+```{r}
+  pvals = c()
+    
+    for (i in 2:(ncol(df))){
+      test = wilcox.test(df[, i] ~ df$Grup)
+      pvals = c(pvals, test$p.value)
+    }
+  
+  p_adj = p.adjust(pvals, "BH") # Ajuntem per Benjamin Hochberg
+  quines = which(p_adj<nivell_sig)
+  quines = quines + 1 # Ajustem perquè la primera és el grup.
+  
+  for (i in quines){
+    p1 = ggplot(df, aes(x = Grup, y = df[, i], colour = Grup)) + 
+      geom_boxplot() + 
+      labs(title = colnames(df)[i],
+           subtitle = paste0("p valor ajustat = ", round(p_adj[i], 4))) + 
+      xlab(colnames(df)[i]) + 
+      theme_bw()
+    
+    p2 = ggplot(df, aes(x = Grup, y = df[, i], colour = Grup)) + 
+      geom_boxplot() + 
+      labs(title = colnames(df)[i],
+           subtitle = paste0("p valor ajustat = ", round(p_adj[i], 4))) + 
+      xlab(colnames(df)[i]) + 
+      theme_bw()
+    
+    p3 = ggplot(df, aes(x = df[, i], fill = Grup)) +
+      geom_density(alpha = .5)+ 
+      labs(title = colnames(df)[i],
+           subtitle = paste0("p valor ajustat = ", round(p_adj[i], 4))) + 
+      xlab(colnames(df)[i]) + 
+      theme_bw()
+    
+    print(paste0("El resultat per la variable ", names(df)[i], " és:"))
+    print(p1)
+    print(p2)
+    print(p3)
+    }
+```
+
