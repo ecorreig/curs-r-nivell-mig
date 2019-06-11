@@ -40,6 +40,36 @@ Seguiu també les instruccions per instal·lar-lo.
 
 ![](input/RStudio2.png)
 
+# Paquets i les llibreries
+
+L'R base, que ens hem descarregat, té una sèrie de funcions, però aquestes es complementen amb moltes d'altres que han desenvolupat tercers i que necessitarem pels nostres anàlisis. Aquestes llibreries s'han d'instal·lar a part, i, a més s'han de carregar en cada sessió que les fem servir. 
+
+Per instal·lar-les utilitzem la funció install.packages: 
+
+```{r , eval=FALSE}
+install.packages("foreign") #llegir Stata,SPSS...
+```
+
+Això només ho hem de fer una vegada en cada ordinador (o quan actualitzem l'R).
+
+Un cop instal·lat l'haurem de carregar a la biblioteca:
+
+```{r , eval=FALSE}
+require(foreign) #library(foreign)
+```
+
+Hem de tenir en compte que el require l'haurem de fer en cada sessió que vulguem utilitzar la funció, inclosa la sessió del markdown. Per tant, no ens hem d'oblidar d'afegir el requiriment de cada paquet també dins del Markdown (normalment al principi de tot, per tenir-les controlades).
+
+Si volem saber-ne més d'un paquet podem fer:
+
+```{r , eval=FALSE}
+require(help="foreign") # o
+??foreign
+```
+
+O simplement buscar-ho al google.
+
+
 # Què és el Markdown?
 
 ## Introducció a ![](input/rmarkdown-logo.png){ width=10% }

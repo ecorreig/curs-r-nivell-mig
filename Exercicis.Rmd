@@ -12,8 +12,8 @@ set.seed(1)
 
 # Exercici 1: manipulació i anàlisi exploratori
 
-0. Assegura't que estàs al directori de treball que toca.
-1. Importa el fitxer prostate.xls a la carpeta input. *Alerta:* està en format "xls", que és l'excel antic, segurament hagis de buscar al google com s'importen.
+0. Assegura't que ets al directori de treball que toca.
+1. Importa el fitxer prostate.xlsx a la carpeta input. 
 Podeu trobar info sobre aquest dataset aquí:
 
 > http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/Cprostate.html

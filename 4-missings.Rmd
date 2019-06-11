@@ -1,0 +1,177 @@
+---
+title: "4 - Tractament de missings"
+author: "Eudald Correig"
+date: "11/6/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+set.seed(1)  # Per poder reproduir els anàlisis
+```
+
+En R, els missings estan representats pel caràcter especial NA. 
+
+NA és una dada que sabem que falta i no s'ha de confondre amb NULL, que és l'objecte que denota el conjunt buit (és a dir, denota que no hi ha res). Hem de distingir per tant el "no hi ha res" del "hi hauria d'haver alguna cosa però falta". 
+
+NA és un ob cjecte curiós, per exemple:
+
+```{r}
+2 == 2
+"hola" == "hola"
+NA == NA
+```
+
+Veieu, doncs, que això pot portar problemes. 
+
+Ho veiem en un exemple:
+
+```{r}
+a = c(3, 4, 6, NA, 8)
+class(a)
+```
+
+Imagineu que volem saber on és el 4 (si és que n'hi ha cap):
+
+```{r}
+a==4
+```
+
+Ara volem saber si conté algun missing:
+
+```{r}
+a==NA
+```
+
+Per fer això tenim la funció especial is.na
+
+```{r}
+is.na(a)
+```
+
+
+Anem a veure les propietats dels missings en una base de dades:
+
+```{r}
+liver = read.csv('input/indian_liver_patient.csv')
+```
+
+Si inspeccionem la base de dades:
+
+```{r}
+summary(liver)  # La funció summary ens treu també els missings!
+```
+
+Veiem que hi ha una variable, Albumin_and_Globulin_Ratio, que té 4 missings.
+
+## Altres maneres de trobar els nans en la nostra base de dades:
+
+```{r}
+sum(is.na(liver))  # Per saber quants n'hi ha
+```
+
+O, si tenim una base de dades molt gran i el summary és massa, podem fer un petit loop per trobar els número de missings de cada columna:
+
+```{r}
+for (i in 1:ncol(liver)){  # Per cada columna a liver
+  num_missings = sum(is.na(liver[,i]))  # Mirem el número total de missings en aquella columna
+  if (num_missings > 0){  ## Si aquest total és més gran que 0
+    print(colnames(liver)[i])  # Imprimim en pantalla el nom de la columna
+    print(num_missings)  # Imiprimim també el número de missings en la columna
+  }
+}
+```
+
+Un cop ja els tenim identificats, anem a veure què fem amb ells:
+
+## Maneres d'interactuar amb els nans:
+
+Això dona problemes:
+
+```{r}
+mean(liver$Age)
+mean(liver$Albumin_and_Globulin_Ratio)
+```
+
+Demanem a R com solucionar això:
+
+```{r, eval=F}
+?mean
+?na.omit
+```
+
+Una manera de solucionar-ho és la següent:
+
+```{r}
+mean(liver$Albumin_and_Globulin_Ratio, na.rm = TRUE)
+mean(na.omit(liver$Albumin_and_Globulin_Ratio))
+```
+
+La recomanació és netejar tota la base de dades abans de començar a fer res.
+
+# Com netejar una base de dades
+
+#### Opció 1:
+
+Treure els casos que tenen nans (és el que fa l'spss per defecte). Ho fem amb la funció complete.cases:
+
+```{r}
+nou_liver = na.omit(liver)
+complete.cases(liver)
+nou_liver = liver[complete.cases(liver),]
+```
+
+Jo ho faig només quan hi ha entrades amb un número exagerat de missings
+
+#### Opció 2: 
+
+Treure variables en les que hi ha molts missings (jo ho faig segur) a partir del 40-50%, fins i tot baixant fins al 15% si la variable no és molt important.
+
+Per treure una variable concreta és útil l'expressió:
+
+```{r, eval=F}
+liver$Albumin_and_Globulin_Ratio = NULL
+```
+
+
+#### Opció 3: 
+
+Aquesta és una opcio intermitja de les dues: treure alguns pacients i algunes variables.
+
+#### Opció 4: 
+
+Combinar les opcions anteriors amb la imputació de missings:
+
+# Imputació de missings
+
+#### OPCIÓ ABSOLUTAMENT PROHIBIDA (en la majoria de casos): reemplaçar els NA amb 0:
+
+```{r}
+liver$Albumin_and_Globulin_Ratio[!complete.cases(liver$Albumin_and_Globulin_Ratio)]=0
+```
+
+#### Opció poc recomanable: reemplaçar els NA amb la mitjana:
+
+```{r}
+m = mean(liver$Albumin_and_Globulin_Ratio, na.rm = TRUE)
+liver$Albumin_and_Globulin_Ratio[!complete.cases(liver)] = m
+```
+
+#### Opció recomanable, imputar els missings amb mètodes múltiples de funcions encadenades:
+
+Això ho podem fer, per exemple, amb els paquets mice o missForest. En aquests paquets hi hem de posar tots els dataframes que utilitzarem, no només les variables amb missings, ja que les que no tenen missings ajudaran a imputar les que sí que en tenen.
+
+```{r}
+require(mice)
+
+miced = mice(liver, method = 'rf') # mètode basat en arbres
+nou_liver = complete(miced)
+```
+
+# Caveats
+
+Quan estem fent imputació s'han de tenir en compte diversos factors:
+
+- **Important:** s'ha de vigilar que els missings siguin aleatoris. És a dir, que no estiguin agrupats de cap manera. Per exemple, imaginem que tenim tres cohorts que provenen de zones diferents i amb poblacions diferents. Resulta que en una d'aquestes cohorts no s'han pres un seguit de mesures. En aquest cas, els missings **no** són aleatoris i afectaran greument els nostres resultats. Aquest problema no té solució i s'ha de tractar de forma individual en cada cas.
+- S'ha de vigilar que no hi hagi pacients amb molts missings, ja que la imputació no serà bona o fins i tot fallarà.
+- S'ha de vigilar que no incloem variables de tipus caràcter a la funció mice. Per exemple, no posem el nom dels pacients com a variable per fer la imputació múltiple perquè no té cap sentit.
