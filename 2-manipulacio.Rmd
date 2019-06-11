@@ -291,25 +291,25 @@ summary(dades)
 Seleccionem una cel·la en concret, p. e., fila 2 columna 1:
 
 ```{r}
-dades.new[2, 1]
+dades[2, 1]
 ```
 
 Seleccionem una fila, per exemple la tercera:
 
 ```{r}
-dades.new[3, ] # Noteu la coma i l'espai buit!
+dades[3, ] # Noteu la coma i l'espai buit!
 ```
 
 Seleccionem una columna, per exemple la cinquena:
 
 ```{r}
-dades.new[,5]
+dades[,5]
 ```
 
 També ho podem fer amb el nom fent servir el símbol del dòlar "$"
 
 ```{r}
-dades.new$edat
+dades$edat
 ```
 
 - Podem seleccionar més d'una fila o columna
@@ -317,40 +317,40 @@ dades.new$edat
 
 Per exemple, seleccionem les tres primeres files i totes les columnes:
 ```{r}
-dades.new[1:3,]
+dades[1:3,]
 ```
 
 Seleccionem les tres últimes columnes i totes les files:
 
 ```{r}
-dades.new[,3:5] 
+dades[,3:5] 
 ```
 
 Seleccionem totes les files menys la 4 i totes les columnes menys la primera:
 
 
 ```{r}
-dades.new[-4,-1]
+dades[-4,-1]
 ```
 
 Podem crear una nova dataframe amb la subselecció:
 
 ```{r}
-dades.sub = dades.new[c(4,5,7:9),-c(1,3)]
+dades.sub = dades[c(4,5,7:9),-c(1,3)]
 dades.sub
 ```
 
 Podem posar una condició dins de la subselecció
 
 ```{r}
-dones = dades.new[dades.new$sexe == "D",]
+dones = dades[dades$sexe == "D",]
 dones
 ```
 
 Un altre exemple:
 
 ```{r}
-grans = dades.new[dades.new$edat > 85,]
+grans = dades[dades$edat > 85,]
 grans
 ```
 

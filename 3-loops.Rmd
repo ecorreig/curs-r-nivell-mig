@@ -224,6 +224,7 @@ suma_senars
 R té una funció molt útil que ens permet fer aquest tipus d'operacions de forma més simple i ràpida (ja que és una operació vectoritzada) amb la funció ifelse:
 
 ```{r}
+dades = read.csv('input/dades.csv')
 dades$persona_gran = ifelse(dades$edat>75, "sí", "no")
 ```
 
