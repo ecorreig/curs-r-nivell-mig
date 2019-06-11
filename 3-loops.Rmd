@@ -68,7 +68,7 @@ suma_primers
 Exemple pràctic:
 
 ```{r}
-df = read.csv('input/Heart.csv')
+df = read.csv('datasets/Heart.csv')
 df$X=NULL # traiem la primera, que no té cap sentit
 str(df) # Mirem l'estructura de les variables
 ```
@@ -87,7 +87,7 @@ str(df)
 Amb els noms de les columnes:
 
 ```{r}
-df = read.csv('input/Heart.csv')
+df = read.csv('datasets/Heart.csv')
 df$X=NULL # traiem la primera, que no té cap sentit
 str(df) # Mirem l'estructura de les variables
 ```
@@ -224,7 +224,7 @@ suma_senars
 R té una funció molt útil que ens permet fer aquest tipus d'operacions de forma més simple i ràpida (ja que és una operació vectoritzada) amb la funció ifelse:
 
 ```{r}
-dades = read.csv('input/dades.csv')
+dades = read.csv('datasets/dades.csv')
 dades$persona_gran = ifelse(dades$edat>75, "sí", "no")
 ```
 
@@ -234,7 +234,7 @@ Exemple pràctic:
 Importem una base de dades amb moltes comparacions múltiples:
 
 ```{r}
-df = read.csv('input/dades_mult.csv')
+df = read.csv('datasets/dades_mult.csv')
 ```
 
 ```{r}

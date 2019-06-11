@@ -21,7 +21,7 @@ Sovint necessitarem només troços de cada base de dades per fer cada anàlisi; 
 Una forma simple és fer una subselecció com les que ja hem vist. Per exemple, en el dataset indian_liver_patient:
 
 ```{r}
-df = read.csv('input/indian_liver_patient.csv')
+df = read.csv('datasets/indian_liver_patient.csv')
 df_reduit = df[, -c(10,11)]
 ```
 
@@ -70,9 +70,9 @@ I operarem de forma similar amb rbind.dataframe (per exemple si volem ajuntar da
 Per fer-ho utilitzarem la funció merge. Ho fem amb els següents tres fitxers, que ens passen de forma separada i volem ajuntar per analitzar:
 
 ```{r}
-df1 = read.csv('input/per_ajuntar_1.csv')
-df2 = read.csv('input/per_ajuntar_2.csv')
-df3 = read.csv('input/per_ajuntar_3.csv')
+df1 = read.csv('datasets/per_ajuntar_1.csv')
+df2 = read.csv('datasets/per_ajuntar_2.csv')
+df3 = read.csv('datasets/per_ajuntar_3.csv')
 head(df1)
 head(df2)
 head(df3)
@@ -133,7 +133,7 @@ Treballarem amb les següents dades:
 
 ```{r}
 require(reshape2)
-df = read.csv('input/dades_reshape.csv')
+df = read.csv('datasets/dades_reshape.csv')
 df$edat = round(df$edat)
 head(df)
 ```

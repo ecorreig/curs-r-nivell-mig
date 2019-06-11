@@ -97,7 +97,7 @@ Aquí puc tornar a escriure normal. Fins i tot puc fer coses com **negreta** o *
 
 ```{r}
 # Puc fer que imprimeixi resultats
-liver = read.csv('input/indian_liver_patient.csv')
+liver = read.csv('datasets/indian_liver_patient.csv')
 summary(liver)
 ```
 

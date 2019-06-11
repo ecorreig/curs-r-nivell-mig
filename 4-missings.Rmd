@@ -53,7 +53,7 @@ is.na(a)
 Anem a veure les propietats dels missings en una base de dades:
 
 ```{r}
-liver = read.csv('input/indian_liver_patient.csv')
+liver = read.csv('datasets/indian_liver_patient.csv')
 ```
 
 Si inspeccionem la base de dades:

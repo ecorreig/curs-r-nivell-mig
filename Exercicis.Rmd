@@ -10,10 +10,33 @@ knitr::opts_chunk$set(echo = TRUE)
 set.seed(1)
 ```
 
+# Exercici 1: inicialització i exploració
+
+**Nota:** Per fer aquest exercici et pot ajudar el fitxer aux1-primers_passos.
+
+1. Importa el fitxer DominicanHTN.xslx a un dataframe (recorda que necessitaràs alguna llibreria que t'ajudi):
+
+```{r}
+require(openxlsx)
+df = read.xlsx('datasets/DominicanHTN.xlsx')
+```
+
+1. Explora'l i, si cal, formateja'l correctament.
+
+1. Selecciona només les dones. Quantes n'hi ha? Quina mitjana de SBP tenen? 
+1. Selecciona totes les persones del poblat La Altagracia. Quants homes i dones hi ha? Quina és la mediana de la pressió diastòlica a aquest poble?
+1. Quin és el poble amb la pressió sistòlica més alta? I amb la desviació estàndard més gran?
+1. Fes un test T entre les pressions dels homes i les dones.
+*Nota:* La funció per fer un test t és: t.test
+1. Fes un anova entre les pressions entre tots els pobles. Hi ha diferències significatives?
+*Nota:* La funció per fer un anova és: aov
+
+
 # Exercici 1: manipulació i anàlisi exploratori
 
+
 0. Assegura't que ets al directori de treball que toca.
-1. Importa el fitxer prostate.xlsx a la carpeta input. 
+1. Importa el fitxer prostate.xlsx a la carpeta datasets. 
 Podeu trobar info sobre aquest dataset aquí:
 
 > http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/Cprostate.html
@@ -35,3 +58,12 @@ dfi = complete(temp)
 5. Feu gràfics simples d'aquestes associacions.
 
 
+# Exercici 2: missings
+
+1. Importa el fitxer diabetes.csv, que trobaràs a la carpeta datasets. En pots trobar més informació aquí:
+
+> http://biostat.mc.vanderbilt.edu/wiki/pub/Main/DataSets/Cdiabetes.html
+
+1. Explora'l i formateja'l correctament
+1. Analitza els missings i tracta'ls de la forma que creguis més convenient.
+1. *Avançat*: baixa't el paquet xray i utilitza la funció anomalies per analitzar els missings.

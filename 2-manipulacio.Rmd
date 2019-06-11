@@ -101,7 +101,7 @@ df = read.spss("ruta",
 ##  Exemple
 
 ```{r}
-dades = read.csv("input/dades.csv", row.names="id")
+dades = read.csv("datasets/dades.csv", row.names="id")
 ```
 
 

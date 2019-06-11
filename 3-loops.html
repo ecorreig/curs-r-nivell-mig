@@ -628,7 +628,7 @@ for (i in primers){
 suma_primers</code></pre>
 <pre><code>## [1] 1060</code></pre>
 <p>Exemple pràctic:</p>
-<pre class="r"><code>df = read.csv(&#39;input/Heart.csv&#39;)
+<pre class="r"><code>df = read.csv(&#39;datasets/Heart.csv&#39;)
 df$X=NULL # traiem la primera, que no té cap sentit
 str(df) # Mirem l&#39;estructura de les variables</code></pre>
 <pre><code>## &#39;data.frame&#39;:    303 obs. of  14 variables:
@@ -668,7 +668,7 @@ str(df)</code></pre>
 ##  $ Thal     : Factor w/ 3 levels &quot;fixed&quot;,&quot;normal&quot;,..: 1 2 3 2 2 2 2 2 3 3 ...
 ##  $ AHD      : Factor w/ 2 levels &quot;No&quot;,&quot;Yes&quot;: 1 2 2 1 1 1 2 1 2 2 ...</code></pre>
 <p>Amb els noms de les columnes:</p>
-<pre class="r"><code>df = read.csv(&#39;input/Heart.csv&#39;)
+<pre class="r"><code>df = read.csv(&#39;datasets/Heart.csv&#39;)
 df$X=NULL # traiem la primera, que no té cap sentit
 str(df) # Mirem l&#39;estructura de les variables</code></pre>
 <pre><code>## &#39;data.frame&#39;:    303 obs. of  14 variables:
@@ -833,7 +833,7 @@ if (a &gt; 5 | a &lt; 0){
 <pre class="r"><code>a = round(rnorm(100, 50, 10))
 
 which(a &gt; 65)</code></pre>
-<pre><code>## [1] 87</code></pre>
+<pre><code>## [1]  1 14 35 74 85</code></pre>
 </div>
 </div>
 <div id="loops-amb-condicionals" class="section level1">
@@ -856,11 +856,11 @@ suma_parells</code></pre>
 <div id="ifelse" class="section level2">
 <h2>ifelse</h2>
 <p>R té una funció molt útil que ens permet fer aquest tipus d’operacions de forma més simple i ràpida (ja que és una operació vectoritzada) amb la funció ifelse:</p>
-<pre class="r"><code>dades = read.csv(&#39;input/dades.csv&#39;)
+<pre class="r"><code>dades = read.csv(&#39;datasets/dades.csv&#39;)
 dades$persona_gran = ifelse(dades$edat&gt;75, &quot;sí&quot;, &quot;no&quot;)</code></pre>
 <p>Exemple pràctic:</p>
 <p>Importem una base de dades amb moltes comparacions múltiples:</p>
-<pre class="r"><code>df = read.csv(&#39;input/dades_mult.csv&#39;)</code></pre>
+<pre class="r"><code>df = read.csv(&#39;datasets/dades_mult.csv&#39;)</code></pre>
 <pre class="r"><code>nivell_sig = 0.01
 for (i in 2:ncol(df)){
   wt = wilcox.test(df[,i]~df$Grup)
