@@ -1,0 +1,46 @@
+---
+title: "Procediment per començar un anàlisi"
+author: "Eudald Correig"
+date: "Juny 2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+En aquest document faig un resum dels passos per tal de començar un anàlisi de zero en R i RStudio amb una base de dades en algun format tipus csv, excel o spss.
+
+Els passos a seguir són els següents:
+
+1. Creem una carpeta on vulguem i hi afegim el fitxer o els fitxers de la base de dades.
+1. Obrim l'RStudio (cliquem dues vegades, com si fos qualsevol altre programa).
+1. Canviem l'espai de treball de l'RStudio a aquell on tinguem el fitxer de dades. Per fer-ho, anem a Session -> Set Working Directory -> Choose Directory, i allà naveguem fins a la carpeta desitjada.
+1. Creem un fitxer Markdown anant a File -> New File -> R Markdown (o apretant a la icona sota de File).
+1. Esborrem tot el que hi ha *sota del primer chunk*. És a dir, des d'on hi diu ## R Markdown fins al final.
+1. Apretem a knit, ens demanarà de guardar el fitxer, li posem el nom que vulgueu, i un cop fet, si ho hem fet bé, ens traurà un infore amb només el títol. Això vol dir que ja ho tenim tot llest per començar a treballar.
+1. Importem la base de dades a un dataframe. Per fer-ho, depenent del format, farem (imaginem que el fitxer es diu "dades"):
+
+CSV:
+
+```{r, eval=F}
+df = read.csv('dades.csv')
+```
+
+Excel:
+
+```{r, eval=F}
+require(openxlsx)  # fixeu-vos que hem d'importar una llibreria per disposar de la funció
+df = read.xlsx('dades.xlsx', sheet = 1)
+```
+
+SPSS:
+
+```{r, eval=F}
+require(foreign)  # fixeu-vos que hem d'importar una llibreria per disposar de la funció
+df = read.spss('dades.sav', to.data.frame = TRUE)
+```
+
+8. Un cop importat, l'explorarem amb les eines que coneixem (View, str, summary, pairs).
+9. Reformatejarem les variables que ho necessitin (amb as.numeric, as.factor (o factor) i as.character).
+10. Començarem l'anàlisi estadístic.
