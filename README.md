@@ -1,5 +1,7 @@
 # Curs R - Nivell Mitjà
 
+**Alerta, repositori provisional.**
+
 Aquest curs inclou els següents punts:
 
 0. Introducció
