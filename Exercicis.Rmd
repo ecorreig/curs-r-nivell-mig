@@ -32,7 +32,7 @@ df = read.xlsx('datasets/DominicanHTN.xlsx')
 *Nota:* La funció per fer un anova és: aov
 
 
-# Exercici 1: manipulació i anàlisi exploratori
+# Exercici 2: manipulació i anàlisi exploratori
 
 
 0. Assegura't que ets al directori de treball que toca.
@@ -43,12 +43,13 @@ Podeu trobar info sobre aquest dataset aquí:
 
 2. Explora'l amb les eines de la classe 2 (str, View, pairs, etc).
 3. Formategeu correctament les variables que interessin i traieu les que no.
-Entre altres coses, veureu que hi ha alguns missings; els podeu imputar fent (això ho veurem en la propera classe):
+Entre altres coses, veureu que hi ha alguns missings; els podeu imputar fent:
 
 ```{r}
 require(mice)
-temp = mice(df) # on df és el nom del dataframe
+temp = mice(df, m=1) # on df és el nom del dataframe
 dfi = complete(temp)
+# Nota: m=1 és per només fer la imputació 1 vegada; en condicions reals l'hauríem de fer més vegades i després agrupar els resultats, però per simplicitat aquí no ho farem.
 ```
 
 3. Ara fixeu-vos que tenim la variable status amb 1 nivell de viu, 5 nivells de mort i un nivell d'altres. A nosaltres en aquest moment només ens interessa viu o mort, per tant creeu una nova variable que sigui viu o mort. Podeu fer un loop o utilitzar la funció ifelse (que hem vist a la classe 3).
@@ -58,7 +59,7 @@ dfi = complete(temp)
 5. Feu gràfics simples d'aquestes associacions.
 
 
-# Exercici 2: missings
+# Exercici 3: missings
 
 1. Importa el fitxer diabetes.csv, que trobaràs a la carpeta datasets. En pots trobar més informació aquí:
 
@@ -67,3 +68,25 @@ dfi = complete(temp)
 1. Explora'l i formateja'l correctament
 1. Analitza els missings i tracta'ls de la forma que creguis més convenient.
 1. *Avançat*: baixa't el paquet xray i utilitza la funció anomalies per analitzar els missings.
+
+# Exercici 4: Estadística bàsica
+
+En aquest exercici utilitzarem el dataframe "Heart.csv". Aleshores:
+    - Les distribucionsn de les variables contínues són normals?
+    - Hi ha diferències significatives entre el MaxHR entre homes i dones
+    - I entre AHD sí o no?
+    - Hi ha correlació entre RestBP i MaxHR?
+    - Hi ha diferència significativa entre el Colesterol segons el Thal? Alerta que hi ha NAs!
+    - Hi ha diferència significativa del RestBP segons el ChestPain?
+    - Hi ha diferències significatives entre l'AHD segons el sexe?
+    
+
+# Exercici 5: Models predictius
+
+Seguint amb el mateix dataframe que l'exercici anterior:
+    - Fes un model predictiu simple d'MaxHR segons totes les altres variables. (**Nota:** alerta amb les dues variables que potser has creat a la primera part dels exercicis, correlacionen molt amb les originals i et poden donar problemes, millor esborrar-les.) També hi ha un parell de variables amb NA's, s'ha de fer alguna cosa abans de continuar.
+    - Fes un resum del model i intenta fer gràfics per explicar-lo.
+    - Fes un model predictiu  d'AHD segons totes les altres variables (alerta que AHD és una variable dicotòmica!).
+    - Afegeix o suprimeix variables per tenir el millor model possible.
+    - Dibuixa els resultats.
+
